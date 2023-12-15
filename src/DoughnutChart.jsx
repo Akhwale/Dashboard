@@ -4,6 +4,30 @@ import { Doughnut } from 'react-chartjs-2';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
+const options = {
+  maintainAspectRatio: false,
+  plugins: {
+    
+    legend: {
+      position: 'right',
+      align: 'center',
+      
+    },
+    title: {
+      display: true,
+      text: 'My Doughnut Chart Title',
+      padding: {
+        top: 10,
+        bottom: 15,
+      },
+      font: {
+        size: 16,
+        weight: 'bold',
+      },
+    },
+  },
+}
+
 export const data = {
   labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
   datasets: [
@@ -32,5 +56,5 @@ export const data = {
 };
 
 export function DoughnutChart() {
-  return <Doughnut data={data} />;
+  return <Doughnut data={data} options={options}/>;
 }

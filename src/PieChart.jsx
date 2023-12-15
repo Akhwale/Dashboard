@@ -3,6 +3,30 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
+export const options = {
+ 
+    
+  plugins: {
+    
+    legend: {
+      position: 'right',
+      align: 'center',
+      
+    },
+  },
+  layout: {
+    
+    padding: {
+      right: 0, // Remove right padding
+      left: 0, // Remove left padding
+      top: 0, // Remove top padding
+      bottom: 0, // Remove bottom padding
+    },
+   
+
+  },
+};
+
 
 export const data = {
   labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
@@ -32,5 +56,9 @@ export const data = {
 };
 
 export function PieChart() {
-  return <Pie data={data} />;
+  return (
+    <div style={{ background:"red" }}>
+      <Pie data={data} options={options}/>
+    </div>
+  )
 }

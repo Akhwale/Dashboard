@@ -6,7 +6,7 @@ export default function Topnav() {
   return (
    
 
-    <div className="w-full flex justify-between items-center h-[50px] p-4 border-b shadow-sm bg-red-400">
+    <div className="w-full flex justify-between items-center h-[6vh] p-4 border-b shadow-sm bg-red-400">
         <div className="">
          <Search/>
         </div>
