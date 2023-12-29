@@ -21,7 +21,7 @@ const options = {
         bottom: 15,
       },
       font: {
-        size: 16,
+        size: 14,
         weight: 'bold',
       },
     },

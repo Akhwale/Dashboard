@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { LineChart } from './LineChart'
 import { DoughnutChart } from './DoughnutChart'
 import { VerticalBar } from './VerticalBar'
@@ -6,9 +6,26 @@ import { PieChart } from './PieChart'
 import { HorizontalBar } from './HorizontalBar'
 import { CircularProgressBar } from './CircularProgress'
 import {  CalendarCheck, Globe, Home, MessageSquare, Star, Users } from "lucide-react"
+import { response } from 'express'
+
+
 
 
 export default function Dashboard() {
+
+
+
+
+// axios.get("http\\:localhost:5000\listed")
+// .then(response=>{
+//     const data = response.data
+//     console.log("response:" , data);
+// })
+// .catch(error => {
+//     // Handle errors
+//     console.error('Error fetching data:', error);
+//   });
+
 
     return (
 
@@ -21,7 +38,7 @@ export default function Dashboard() {
                          
                         <div className='flex'>
                         <div className="w-32 h-32 rounded-full text-5xl flex items-center shadow-lg justify-around border-8 border-gray-200">
-                            <p className='font-bold text-gray-500'>786</p>
+                            <p className='font-bold text-gray-500'>7386</p>
                         </div>
                         <div><Home size={30} color='gray'/></div>
                         </div>
@@ -112,7 +129,6 @@ export default function Dashboard() {
                 </div>
             </div>
 
-
             {/* Second Row */}
 
             <div className='bg-gray-100 p-3 mt-2'>
@@ -135,53 +151,69 @@ export default function Dashboard() {
             </div>
 
 
+             {/* Third Row */}
 
-
-
-
-            {/* Second Row */}
-
-
-            {/* <div className='bg-red-300 p-3'>
-                <div className='grid grid-cols-12 md:h-[50vh] gap-3'>
-                    
-                    <div className="col-span-12 md:col-span-6 bg-red-600">
-                    <HorizontalBar/>
-                    </div> */}
-
-    
-
-                    {/* <div className="col-span-12 md:col-span- bg-red-100">
-                    <PieChart/>
-                    </div> */}
-{/* 
-                    <div className="col-span-12 md:col-span-6 bg-red-100">
-                        <VerticalBar/>
+             <div className='bg-gray-100 p-3 mt-2'>
+                <div className='grid grid-cols-12 md:h-[30vh] gap-3'>
+                                       
+                    <div className="col-span-12 md:col-span-4 bg-white border shadow-lg">
+                        <LineChart/>
                     </div>
 
-                </div>
-            </div> */}
-
-
-            {/* Third Row */}
-{/* 
-            <div className='bg-red-100 p-3'>
-                <div className='grid grid-cols-12 md:h-[40vh] gap-3'>
-                    
-                    <div className="col-span-12 md:col-span-4 bg-yellow-200">
-                        <DoughnutChart/>
+                            
+                    <div className="col-span-12 md:col-span-3 border shadow-lg">
+                                               
+                    <PieChart />
                     </div>
 
-                    <div className="col-span-12 md:col-span-8 bg-yellow-100 ">
-                        <LineChart />
+                    <div className="col-span-12 md:col-span-3 border shadow-lg">
+                                               
+                    <PieChart />
                     </div>
 
-                    
-
-                </div>
-            </div> */}
-
-
+                    <div className="col-span-12 md:col-span-2 border shadow-lg">
+                         <table class="min-w-full border-collapse border border-gray-200 ">
+                            <thead>
+                                <tr>
+                                    <th class="py-2 px-2 bg-gray-100 text-left">Name</th>
+                                    <th class="py-2 px-2 bg-gray-100 text-left">Type</th>
+                                    
+                                </tr>
+                            </thead>
+                    <tbody>
+                        <tr class="bg-gray-200">
+                            <td class="py-1 px-2 border-b border-gray-200">Jan Ventures</td>
+                            <td class="py-1 px-2 border-b border-gray-200">Apartment</td>
+                        </tr>
+                        <tr class="bg-white">
+                            <td class="py-1 px-2 border-b border-gray-200">Trinedah</td>
+                            <td class="py-1 px-2 border-b border-gray-200">Bungalow</td>
+                        </tr>
+                        <tr class="bg-gray-200">
+                            <td class="py-1 px-2 border-b border-gray-200">Jan Ventures</td>
+                            <td class="py-1 px-2 border-b border-gray-200">Apartment</td>
+                        </tr>
+                        <tr class="bg-gray-200">
+                            <td class="py-1 px-2 border-b border-gray-200">Jan Ventures</td>
+                            <td class="py-1 px-2 border-b border-gray-200">Apartment</td>
+                        </tr>
+                        <tr class="bg-white">
+                            <td class="py-1 px-2 border-b border-gray-200">Trinedah</td>
+                            <td class="py-1 px-2 border-b border-gray-200">Bungalow</td>
+                        </tr>
+                        <tr class="bg-gray-200">
+                            <td class="py-1 px-2 border-b border-gray-200">Jan Ventures</td>
+                            <td class="py-1 px-2 border-b border-gray-200">Apartment</td>
+                        </tr>
+                        <tr class="bg-gray-200">
+                            <td class="py-1 px-2 border-b border-gray-200">Jan Ventures</td>
+                            <td class="py-1 px-2 border-b border-gray-200">Apartment</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+           </div>
+          </div>
         </div>
     )
 }

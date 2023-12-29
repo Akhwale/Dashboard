@@ -3,28 +3,40 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
-export const options = {
- 
+
+const options = {
+  maintainAspectRatio: false,
     
-  plugins: {
-    
+  plugins: {  
     legend: {
       position: 'right',
       align: 'center',
-      
     },
-  },
-  layout: {
+    title: {
+      display: true,
+      text: 'My Doughnut Chart Title',
+      padding: {
+        top: 10,
+        bottom: 15,
+      },
+      font: {
+        size: 14,
+        weight: 'bold',
+      },
+    },
+    layout: {
     
-    padding: {
-      right: 0, // Remove right padding
-      left: 0, // Remove left padding
-      top: 0, // Remove top padding
-      bottom: 0, // Remove bottom padding
+      padding: {
+        right: 0, // Remove right padding
+        left: 0, // Remove left padding
+        top: 0, // Remove top padding
+        bottom: 0, // Remove bottom padding
+      },
+     
+  
     },
-   
-
   },
+  
 };
 
 
@@ -57,8 +69,8 @@ export const data = {
 
 export function PieChart() {
   return (
-    <div style={{ background:"red" }}>
+   
       <Pie data={data} options={options}/>
-    </div>
+    
   )
 }
