@@ -27,7 +27,7 @@ export const options = {
   },
 };
 
-export function VerticalBar() {
+export function VerticalBar2() {
   const [barData, setBarData] = useState({});
 
   useEffect(() => {
@@ -35,15 +35,15 @@ export function VerticalBar() {
       try {
         const results = await axios.get("http://localhost:5000/proptype");
 
-        const property = results.data.bardata.map(item => item.propertyType);
-        const stats = results.data.bardata.map(item => item.count);
+        const accomodates = results.data.accom.map(item => item.accommodates);
+        const stats = results.data.accom.map(item => item.count);
 
-        const truncatedLabels = property.map(label => label.slice(0, 5));
-        console.log(property);
+        
+        console.log(accommodates);
         console.log(stats);
 
         setBarData({
-          labels: truncatedLabels,  // Use propType for labels
+          labels: accommodates,  // Use propType for labels
           datasets: [
             {
               data: stats,

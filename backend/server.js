@@ -36,58 +36,34 @@ app.get("/", (req,res)=>{
 });
 
 
-// Finding total number of airbnbs listed
+// Finding total number of airbnbs listed. This query displays the number of listed properties.
 
-app.get("/listed", async (req, res) => {
+app.get("/listProp", async (req, res) => {
     try {
-        const count = await mongoose.connection.db.collection('listingsAndReviews').countDocuments();
-        console.log(count);
-        res.status(200).json({ count }); // Sending count as a JSON response
+        const NoListProp = await mongoose.connection.db.collection('listingsAndReviews').countDocuments();
+        res.status(200).json({ NoListProp });
     } catch (error) {
-        console.error("Error fetching data from 'listingsAndReviews'");
+        console.error("Error fetching data from 'listingsAndReviews'", error);
         res.status(500).json({ error: "Failed to fetch data from 'listingsAndReviews'" });
     }
 });
 
 
-// Finding total number of reviews
+// Finding total number of reviews given in the dataset. i.e ones whose array is not empty
 
-// app.get("/reviews", async(req,res) => {
-//     try{
-//         const reviews = await mongoose.connection.db.collection('listingsAndReviews').find({ reviews: { $exists: true, $ne: null } }).toArray();
-//         console.log(reviews);
-//     } catch(error){
-//         console.error("Error fetching data from 'listingsAndReviews'");
-//         res.status(500).json({error : "Failed to fetch data from 'listingsAndReviews'"});
-//     }
-// })
-
-// app.get("/reviews", async (req, res) => {
-//     try {
-//         const reviews = await mongoose.connection.db.collection('listingsAndReviews').find({ reviews: { $exists: true, $ne: null } }).toArray();
-//         console.log(reviews.length);
-//         res.status(200).json({ reviews }); // Sending the reviews as JSON response
-//     } catch (error) {
-//         console.error("Error fetching data from 'listingsAndReviews'");
-//         res.status(500).json({ error: "Failed to fetch data from 'listingsAndReviews'" });
-//     }
-// });
-
-
-
-
-
-app.get("/reviews", async (req, res) => {
+app.get("/listRev", async (req, res) => {
     try {
         const count = await mongoose.connection.db.collection('listingsAndReviews')
-            .countDocuments({ reviews: { $exists: true, $ne: null } });
+            .countDocuments({ reviews: { $exists: true, $not: { $size: 0 } } });
 
         res.status(200).json({ reviewsCount: count }); // Sending the count as JSON response
     } catch (error) {
-        console.error("Error fetching review count from 'listingsAndReviews'");
-        res.status(500).json({ error: "Failed to fetch review count from 'listingsAndReviews'" });
+        console.error("Error fetching count of documents with reviews content from 'listingsAndReviews'");
+        res.status(500).json({ error: "Failed to fetch count of documents with reviews content from 'listingsAndReviews'" });
     }
 });
+
+// No of reviews with lank arrays
 
 
 app.get("/reviewsEmptyCount", async (req, res) => {
@@ -102,20 +78,7 @@ app.get("/reviewsEmptyCount", async (req, res) => {
     }
 });
 
-
-
-app.get("/reviewsWithContentCount", async (req, res) => {
-    try {
-        const count = await mongoose.connection.db.collection('listingsAndReviews')
-            .countDocuments({ reviews: { $exists: true, $not: { $size: 0 } } });
-
-        res.status(200).json({ reviewsWithContentCount: count }); // Sending the count as JSON response
-    } catch (error) {
-        console.error("Error fetching count of documents with reviews content from 'listingsAndReviews'");
-        res.status(500).json({ error: "Failed to fetch count of documents with reviews content from 'listingsAndReviews'" });
-    }
-});
-
+// No of countries listed.
 
 app.get("/noOfCountries", async (req, res) => {
     try {
@@ -130,7 +93,7 @@ app.get("/noOfCountries", async (req, res) => {
     }
 });
 
-
+// Unique countries diplayed by their names
 app.get("/uniqueCountries", async (req, res) => {
     try {
         const uniqueCountries = await mongoose.connection.db.collection('listingsAndReviews').distinct("address.country");
@@ -144,6 +107,86 @@ app.get("/uniqueCountries", async (req, res) => {
         res.status(500).json({ error: "Error occurred while fetching unique countries" });
     }
 });
+
+
+
+// Pie chart 1 : No of Airbnbs per country
+
+app.get("/piechart-1", async (req, res)=>{
+    try{
+
+        const piedata = await mongoose.connection.db.collection("listingsAndReviews").aggregate([
+        
+        {
+           $group:{
+            _id : "$address.country",
+            count: { $sum: 1} 
+           }
+        },
+        {
+            $project : {
+                _id : 0,
+                country: "$_id",
+                count: 1
+            }
+        },
+        {
+            $sort: { country: 1 }
+        }
+    
+    ]).toArray();
+
+       
+        res.status(200).json({piedata});
+
+    }
+    catch(error){
+        console.log(error);
+    }
+});
+
+
+
+// Type of property
+
+app.get("/proptype", async (req,res) =>{
+    try{
+        const bardata = await mongoose.connection.db.collection("listingsAndReviews").aggregate([
+            {
+                $group:{
+                    _id: "$property_type",
+                    count: { $sum : 1}
+                }
+            },
+            {
+                $project:{
+                    _id:0,
+                    propertyType : "$_id",
+                    count: 1
+                }
+            },
+            {
+                $sort:{
+                    count: -1
+                }
+            },
+            {
+                $limit:10
+            }
+        ]).toArray();
+
+        console.log(bardata);
+        res.status(200).json({bardata});
+    }
+    catch(error){
+        console.log("error", error);
+    }
+});
+
+
+
+
+
 
 
 // Ammenities
@@ -221,6 +264,24 @@ app.get("/property", async (req, res) => {
 });
 
 
+
+
+app.get("/propType", async (req,res)=> {
+    try{
+        const count = await mongoose.connection.db.collection("listingsAndReviews").distinct("property_type");
+
+        const num = count.length;
+
+        console.log(num);
+        res.status(200).json({num});
+
+    }
+    catch(error){
+        console.log("error");
+        
+    }
+})
+
 app.get("/barn", async(req,res)=>{
     try{
         const barns = await mongoose.connection.db.collection("listingsAndReviews").countDocuments({property_type:"Barn"});
@@ -229,4 +290,63 @@ app.get("/barn", async(req,res)=>{
     catch(error){
         console.log(error);
     }
-})
+});
+
+
+
+
+app.get("/policy", async(req,res)=>{
+    try{
+        const policyData = await mongoose.connection.db.collection("listingsAndReviews").aggregate([
+            {
+                $group:{
+                    _id:"$cancellation_policy",
+                    count:{ $sum:1}
+                    
+                }
+            },
+            {
+                $project:{
+                    _id:0,
+                    policy:"$_id",
+                    count:1
+                    
+                }
+            }
+        ]).toArray();
+
+        res.status(200).json({policyData});
+
+    }
+    catch(error){
+        console.log("Error", error);
+    }
+});
+
+
+app.get("/accomodation", async(Req, res)=>{
+    try{
+
+        const accom = await mongoose.connection.db.collection("listingsAndReviews").aggregate([
+            {
+                $group:{
+                    _id: "$accommodates",
+                    count: { $sum:1}
+                }
+            },
+            {
+                $project:{
+                    _id:0,
+                    accommodates: "$_id",
+                    count:1
+                }
+            }
+        ]).toArray();
+
+        res.status(200).json({accom});
+
+    }
+    catch(error){
+        console.log("error", error);
+    }
+});

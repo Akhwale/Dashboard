@@ -1,21 +1,32 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
+import axios from 'axios';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
+
 const options = {
-  maintainAspectRatio: false,
+  
+  aspectRatio: 2,
+  responsive:true,
+  
   plugins: {
-    
     legend: {
+      display: true,
       position: 'right',
-      align: 'center',
-      
+      align: 'center', // This aligns the legend itself
+      labels: {
+
+        fontSize: 14,
+        fontStyle: 'normal',
+        fontFamily: 'Arial',
+        padding: 10,
+      },
     },
     title: {
-      display: true,
-      text: 'My Doughnut Chart Title',
+      display: false,
+      text: 'Representation Per Country',
       padding: {
         top: 10,
         bottom: 15,
@@ -28,12 +39,29 @@ const options = {
   },
 }
 
-export const data = {
-  labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+
+
+export function DoughnutChart() {
+
+  const [chartData, setChartData] = useState({});
+
+  useEffect(()=>{
+    const fetchData = async() =>{
+      try{
+
+        const results = await axios.get("http://localhost:5000/piechart-1");
+        
+        const countries = results.data.piedata.map(item => item.country);
+        const stats = results.data.piedata.map(item => item.count);
+        console.log(stats);
+        console.log(countries);
+        
+        setChartData({
+          labels: countries,
   datasets: [
     {
-      label: '# of Votes',
-      data: [12, 19, 3, 5, 2, 3],
+      label: '# of AirBnbs',
+      data: stats,
       backgroundColor: [
         'rgba(255, 99, 132, 0.2)',
         'rgba(54, 162, 235, 0.2)',
@@ -53,8 +81,29 @@ export const data = {
       borderWidth: 1,
     },
   ],
-};
+        }
 
-export function DoughnutChart() {
-  return <Doughnut data={data} options={options}/>;
+        )
+
+      }
+      catch(error){
+        console.log("This is an error");
+      }
+
+    }
+    fetchData();
+  },[]);
+
+
+ 
+  return (
+    <div style={{  padding: '0', position:'center'}}>
+      {chartData.labels && chartData.datasets ? (
+        <Doughnut data={chartData} options={options} style={{  padding:'0', alignItems:'center'}}/>
+      ) : (
+        <p>Loading...</p>
+      )}
+    </div>
+  );
+  
 }

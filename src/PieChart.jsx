@@ -1,44 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
+import axios from 'axios';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
-
-const options = {
-  maintainAspectRatio: false,
-    
-  plugins: {  
-    legend: {
-      position: 'right',
-      align: 'center',
-    },
-    title: {
-      display: true,
-      text: 'My Doughnut Chart Title',
-      padding: {
-        top: 10,
-        bottom: 15,
-      },
-      font: {
-        size: 14,
-        weight: 'bold',
-      },
-    },
-    layout: {
-    
-      padding: {
-        right: 0, // Remove right padding
-        left: 0, // Remove left padding
-        top: 0, // Remove top padding
-        bottom: 0, // Remove bottom padding
-      },
-     
-  
-    },
-  },
-  
-};
-
 
 export const data = {
   labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
@@ -67,10 +32,34 @@ export const data = {
   ],
 };
 
+
+
 export function PieChart() {
-  return (
-   
-      <Pie data={data} options={options}/>
-    
-  )
+
+  const [ chartData, setChartData] = useState({});
+
+  useEffect(()=>{
+    const fetchData = async()=>{
+      try{
+        const results = await axios.get("http://localhost:5000/policy");
+
+        const policy = results.data.policyData.map(item => item.policy);
+        const stats =  results.data.policyData.map(item => item.count);
+
+        console.log(policy);
+        console.log(stats);
+      }
+      catch(error){
+        console.log("error", error);
+      }
+    }
+    fetchData();
+  }, [])
+
+
+
+
+
+
+  return <Pie data={data} />;
 }

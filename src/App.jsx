@@ -1,10 +1,8 @@
-
-
 import './App.css'
-import Dashboard from './Dashboard'
 import Navbar from './Navbar'
-import Topnav from './Topnav'
-import Calendar  from './Calendar'
+// import Topnav from './Topnav'
+// import Calendar  from './Calendar'
+import Dashboard from './Dashboard'
 
 function App() {
  
@@ -12,11 +10,14 @@ function App() {
   <>
    <div className='w-full flex'>
       <Navbar/>
+      
 
       <main className='flex flex-col grow'>
-        <Topnav/>
+        {/* <Topnav/> */}
         <Dashboard/>
         {/* <Calendar/> */}
+
+      
 
       </main>
 
@@ -24,7 +25,7 @@ function App() {
   </>
       
     
-  )
+  );
 }
 
 export default App
